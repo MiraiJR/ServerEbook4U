@@ -2,7 +2,7 @@ const moongoose = require('mongoose')
 
 const connectDB = async () => {
     try {
-        await moongoose.connect(`mongodb+srv://Ebook4U:Ebook4U8@ebook4u.6vrzeqe.mongodb.net/?retryWrites=true&w=majority`, {
+        await moongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@ebook4u.6vrzeqe.mongodb.net/?retryWrites=true&w=majority`, {
             useNewUrlParser: true, 
             useUnifiedTopology: true 
         })
