@@ -22,7 +22,7 @@ router.delete("/category")
 router.get("/category/:id", bookController.getBooksOfCategory)
 
 // interact with country
-router.get("/country", countryController.createCountry)
+router.post("/country", countryController.createCountry)
 
 // interact with author
 router.get("/author/:name", authorController.getBooksOfAuthor)
