@@ -29,6 +29,10 @@ connectDB()
 // configure port
 const PORT = process.env.PORT || 5000
 
+app.use((err, req, res, next) => {
+    res.status(500).send('Something broke!')
+})
+
 route(app)
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))

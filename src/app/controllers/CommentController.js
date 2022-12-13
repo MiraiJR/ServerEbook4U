@@ -3,6 +3,7 @@ const Comment = require("../models/Comment.js")
 class CommentController {
     async addNewComment(req, res, next) {
         const user = req.userID
+
         const {
             idBook,
             contentComment
@@ -40,6 +41,7 @@ class CommentController {
 
     async deleteComment(req, res, next) {
         const user = req.userID
+
         const {
             idComment
         } = req.body
@@ -83,6 +85,7 @@ class CommentController {
 
     async addAnswerForComment(req, res, next) {
         const user = req.userID
+        
         const {
             idComment,
             contentComment

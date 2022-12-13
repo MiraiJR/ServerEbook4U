@@ -4,7 +4,39 @@ const Chapter = require("../models/Chapter.js")
 const Comment = require("../models/Comment.js")
 
 class BookController {
+    async getAllBook(req, res, next) {
+        try {
+            const books = await Book.find()
+
+            if (!books) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't get all book!"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "get all book successfully!",
+                data: books
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
     async createBook(req, res, next) {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "No file uploaded!"
+            })
+        }
+
         const {
             name,
             description,
@@ -14,13 +46,13 @@ class BookController {
         } = req.body
 
         try {
-
             const newBook = new Book({
                 name,
                 description,
                 author,
                 category,
-                country
+                country,
+                image: req.file.path
             })
 
             await newBook.save()
@@ -168,6 +200,37 @@ class BookController {
                 message: "Internal server error!"
             })
         }
+    }
+
+    async deleteBook(req, res, next) {
+        const idBook = req.params.id
+
+        try {
+            // delete book
+            await Book.deleteOne({
+                _id: idBook
+            })
+
+            // delete the chapters of this book
+            await Chapter.deleteMany({
+                book: idBook
+            })
+
+            return res.status(200).json({
+                success: true,
+                message: "Delete book successfully!"
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
+    async editBook(req, res, next) {
+
     }
 }
 

@@ -23,6 +23,27 @@ const verifyToken = (req, res, next) => {
     }
 }
 
+const verifyRole = async (req, res, next) => {
+    try {
+        const user = await User.findOne({_id: req.userID})
+    
+        if(!user) {
+            return res.status(400).json({success: false, message: "Can't not get this user!"})
+        }
+
+        if(user.role == "Admin") {
+            next()
+        }else {
+            return res.status(400).json({success: false, message: "Only the admin can take this action!"})
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(403).json({success: false, message: "Something is error!"})
+    }
+
+
+}
+
 module.exports = {
-    verifyToken
+    verifyToken, verifyRole
 }

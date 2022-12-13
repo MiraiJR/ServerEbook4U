@@ -13,9 +13,9 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
-    allowedFormats: ["jpg", "png"],
+    allowedFormats: ["jpg", "png", "jpeg"],
     params: {
-        folder: "EBook4U"
+        folder: "EBook4U/upload"
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname)

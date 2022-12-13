@@ -23,15 +23,15 @@ class ImageController {
                 return res.status(400).json({success: false, message: "No file uploaded!"})
             }
 
-            await User.updateOne({
+            const user = await User.findOneAndUpdate({
                 _id: userID
             }, {
                 avatar: req.file.path
             })
 
-            const user = await User.findOne({
-                _id: userID
-            })
+            if(!user) {
+                return res.status(400).json({success: false, message: "Change avatar failed!"})
+            }
 
             return res.status(200).json({success: true, message: "Change avatar successfully!", data: user})
         } catch (error) {

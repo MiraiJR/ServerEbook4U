@@ -31,9 +31,7 @@ class CountryController {
     }
 
     async deleteCountry(req, res, next) {
-        const {
-            idCountry
-        } = req.body
+        const idCountry = req.params.id
 
         try {
             await Country.deleteOne({

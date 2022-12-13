@@ -18,8 +18,7 @@ const Chapter = new Schema({
         ref: "books"
     },
     contentText: {
-        type: String, 
-        required: true
+        type: String
     },
     contentImage: {
         type: Array
