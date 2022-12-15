@@ -1,6 +1,7 @@
 const User = require("../app/models/User.js")
 const jwt = require("jsonwebtoken")
 
+// verify accesstoken from client 
 const verifyToken = (req, res, next) => {
     const authHeader = req.header("Authorization")
     const token = authHeader && authHeader.split(" ")[1]
@@ -19,31 +20,79 @@ const verifyToken = (req, res, next) => {
         next()
     } catch (error) {
         console.log("Error in function verifyToken" + error)
-        return res.status(403).json({success: false, message: "Invalid token"})
+        return res.status(403).json({
+            success: false,
+            message: "Invalid token"
+        })
     }
 }
 
+// chekc role of account because in some action, only admin can take action
 const verifyRole = async (req, res, next) => {
     try {
-        const user = await User.findOne({_id: req.userID})
-    
-        if(!user) {
-            return res.status(400).json({success: false, message: "Can't not get this user!"})
+        const user = await User.findOne({
+            _id: req.userID
+        })
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Can't not get this user!"
+            })
         }
 
-        if(user.role == "Admin") {
+        if (user.role == "Admin") {
             next()
-        }else {
-            return res.status(400).json({success: false, message: "Only the admin can take this action!"})
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: "Only the admin can take this action!"
+            })
         }
     } catch (error) {
         console.log(error)
-        return res.status(403).json({success: false, message: "Something is error!"})
+        return res.status(403).json({
+            success: false,
+            message: "Something is error!"
+        })
     }
+}
 
+// check status account if banned, return status 400 else next to conntroller
+const checkStatusAccount = async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            username: req.body.username
+        })
 
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Can't not get this user!"
+            })
+        }
+
+        if (user.status == "banned") {
+            return res.status(400).json({
+                success: false,
+                message: "The account was banned!"
+            })
+        } else {
+            req.userID = user._id
+
+            next()
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(403).json({
+            success: false,
+            message: "Something is error!"
+        })
+    }
 }
 
 module.exports = {
-    verifyToken, verifyRole
+    verifyToken,
+    verifyRole,
+    checkStatusAccount
 }

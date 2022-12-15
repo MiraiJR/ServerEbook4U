@@ -41,10 +41,7 @@ class CommentController {
 
     async deleteComment(req, res, next) {
         const user = req.userID
-
-        const {
-            idComment
-        } = req.body
+        const idComment = req.params.id
 
         try {
             const comment = await Comment.findOne({

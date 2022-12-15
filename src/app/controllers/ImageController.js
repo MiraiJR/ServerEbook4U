@@ -18,6 +18,7 @@ class ImageController {
 
     async uploadAvatar(req, res, next) {
         const userID= req.userID
+
         try {
             if(!req.file) {
                 return res.status(400).json({success: false, message: "No file uploaded!"})
@@ -33,7 +34,7 @@ class ImageController {
                 return res.status(400).json({success: false, message: "Change avatar failed!"})
             }
 
-            return res.status(200).json({success: true, message: "Change avatar successfully!", data: user})
+            return res.status(200).json({success: true, message: "Change avatar successfully!", data: req.file.path})
         } catch (error) {
             console.log("Error in ImageController: " + error)
             return res.status(500).json({success: false, message: "Internal server error!"})

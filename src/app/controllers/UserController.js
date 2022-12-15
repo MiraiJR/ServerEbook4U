@@ -3,13 +3,23 @@ const User = require("../models/User.js")
 class UserController {
     async editProfile(req, res, next) {
         const idUser = req.userID;
-        const {fullname, phone, email, address} = req.body
+        const {
+            fullname,
+            phone,
+            email,
+            address
+        } = req.body
 
         try {
-            let user = await User.findOne({_id: idUser})
+            let user = await User.findOne({
+                _id: idUser
+            })
 
-            if(!user) {
-                return res.status(400).json({success: false, message: "Can't find this user!"})
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't find this user!"
+                })
             }
 
             user = user.toObject();
@@ -23,18 +33,27 @@ class UserController {
             delete user.role
             delete user._id
             delete user.username
-            delete user.password 
-            delete user.avatar 
+            delete user.password
+            delete user.avatar
             delete user.__v
 
-            await User.updateOne({_id: idUser}, {
+            await User.updateOne({
+                _id: idUser
+            }, {
                 $set: user
             })
 
-            return res.status(200).json({success: true, message: "Update profile successfully!", data: user})
+            return res.status(200).json({
+                success: true,
+                message: "Update profile successfully!",
+                data: user
+            })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({success: false, message: "Internal server error!"})
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
         }
     }
 
@@ -55,9 +74,9 @@ class UserController {
 
             delete user._id
             delete user.username
-            delete user.password 
+            delete user.password
             delete user.__v
-            
+
             // all goood
             return res.status(200).json({
                 success: true,
@@ -75,9 +94,7 @@ class UserController {
 
     async getAllProfileUser(req, res, next) {
         try {
-            let result = []
-
-            let users = await User.find()
+            const users = await User.find()
 
             if (!users) {
                 return res.status(400).json({
@@ -86,22 +103,48 @@ class UserController {
                 })
             }
 
-
-            users.map(item => {
-                let objectItem = item.toObject()
-
-                delete objectItem._id
-                delete objectItem.username
-                delete objectItem.password 
-                delete objectItem.__v
-
-                result.push(objectItem)
-            } )
-
             return res.status(200).json({
                 success: true,
                 message: "Get all profile user successfully!",
-                data: result
+                data: users
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
+    async changeAvatar(req, res, next) {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "No file uploaded!"
+            })
+        }
+
+        const idUser = req.userID
+
+        try {
+            const user = await User.findOneAndUpdate({
+                _id: idUser
+            }, {
+                "avatar": req.file.path
+            })
+
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't find this user!"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Change avatar for this user successfully!",
+                data: req.file.path
             })
         } catch (error) {
             console.log(error)

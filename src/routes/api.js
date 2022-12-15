@@ -12,35 +12,36 @@ const fileUploader = require("../database/CloudinaryConfig.js")
 
 // middleware
 const {
-    verifyToken, verifyRole
+    verifyToken,
+    verifyRole
 } = require("../middleware/Auth.js")
 
 // interact with category
-router.post("/category", categoryController.createCategory)
+router.post("/category", verifyToken, categoryController.createCategory)
 router.get("/category", categoryController.getAllCategory)
-router.put("/category/:id", verifyRole)
-router.delete("/category/:id", verifyRole)
+router.put("/category/:id", verifyToken, verifyRole)
+router.delete("/category/:id", verifyToken, verifyRole)
 router.get("/category/:id", bookController.getBooksOfCategory)
 
 // interact with country
-router.post("/country", verifyRole, countryController.createCountry)
-router.delete("/country/:id", verifyRole, countryController.deleteCountry)
+router.post("/country", verifyToken, verifyRole, countryController.createCountry)
+router.delete("/country/:id", verifyToken, verifyRole, countryController.deleteCountry)
 
 // interact with author
 router.get("/author/:name", authorController.getBooksOfAuthor)
 
 // interact with book 
-router.post("/book", verifyToken, fileUploader.single("file"), bookController.createBook)
+router.post("/book", verifyToken, verifyRole, fileUploader.single("file"), bookController.createBook)
 router.get("/book", bookController.getAllBook)
 router.get("/book/:id", bookController.getBookFollowID)
-router.delete("/book/:id", verifyToken,bookController.deleteBook)
-router.put("/book/:id", verifyToken,bookController.editBook)
+router.delete("/book/:id", verifyToken, verifyRole, bookController.deleteBook)
+router.put("/book/:id", verifyToken, verifyRole, bookController.editBook)
 
 // interact with chapter
-router.post("/chapter", verifyToken,fileUploader.array("file"), chapterController.createChapter)
+router.post("/chapter", verifyToken, verifyRole, fileUploader.array("file"), chapterController.createChapter)
 router.get("/chapter/:id", chapterController.getChapter)
-router.put("/chapter/:id", verifyToken)
-router.delete("/chapter/:id", verifyToken)
+router.put("/chapter/:id", verifyToken, verifyRole)
+router.delete("/chapter/:id", verifyToken, verifyRole)
 
 // interact with user
 router.get("/user/all", userController.getAllProfileUser)
@@ -51,5 +52,6 @@ router.put("/user/me", verifyToken, userController.editProfile)
 // interact with comment 
 router.post("/comment", verifyToken, commentController.addNewComment)
 router.post("/comment/answer", verifyToken, commentController.addAnswerForComment)
+router.delete("/comment/:id", verifyToken, commentController.deleteComment)
 
 module.exports = router

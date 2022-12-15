@@ -6,8 +6,8 @@ const hashLength = 64
 class AuthController {
     async login(req, res, next) {
         try {
+            const idUser = req.userID
             const {
-                username,
                 password
             } = req.body
 
@@ -15,11 +15,11 @@ class AuthController {
 
             // check username existed
             const user = await User.findOne({
-                username
+                _id: idUser
             })
 
             if (!user) {
-                return res.status(200).json({
+                return res.status(400).json({
                     success: false,
                     message: "Username or password don't correct!"
                 })
@@ -33,7 +33,7 @@ class AuthController {
             const pwEncrypt = pwHashed + salt
 
             if (user.password != pwEncrypt) {
-                return res.status(200).json({
+                return res.status(400).json({
                     success: false,
                     message: "Username or password don't correct!"
                 })
@@ -42,8 +42,6 @@ class AuthController {
             //all good 
             // accessToken to authencate
             const accessToken = jwt.sign({userID: user._id}, process.env.ACCESS_TOKEN_SECRET)
-
-            req.session.user = username
 
             return res.status(200).json({
                 success: true,
@@ -75,7 +73,7 @@ class AuthController {
 
             if (isExisted) {
                 console.log("zo")
-                return res.status(200).json({
+                return res.status(400).json({
                     success: false,
                     message: "Username is used! Please using another one!"
                 })

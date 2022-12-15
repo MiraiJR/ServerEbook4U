@@ -1,8 +1,10 @@
 const AuthRouter = require("./auth.js")
 const ApiRouter = require("./api.js")
 const ImageRouter = require("./image.js")
+const AdminRouter = require("./admin.js")
 
 function route(app) {
+    app.use("/admin", AdminRouter)
     app.use("/api", ApiRouter)
     app.use("/auth", AuthRouter)
     app.use("/image", ImageRouter)

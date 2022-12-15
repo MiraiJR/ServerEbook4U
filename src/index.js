@@ -18,7 +18,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // configure session
 app.set('trust proxy', 1)
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: {
+        maxAge: 60000
+    }
+}))
 
 // avoid the blocked request of the backend
 // app.use(cors)

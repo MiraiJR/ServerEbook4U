@@ -39,6 +39,11 @@ const User = new Schema({
         type: String,
         enum: ["Reader", "Author", "Translator", "Admin"],
         default: "Reader"
+    },
+    status: {
+        type: String,
+        enum: ["banned", "unbanned"],
+        default: "unbanned"
     }
 })
 
