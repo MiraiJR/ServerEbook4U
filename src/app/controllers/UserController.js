@@ -1,18 +1,46 @@
 const User = require("../models/User.js")
-const Book = require("../models/Book.js")
-const Category = require("../models/Category.js")
-const {
-    ObjectID
-} = require("bson")
 
 class UserController {
     async editProfile(req, res, next) {
+        const idUser = req.userID;
+        const {fullname, phone, email, address} = req.body
 
+        try {
+            let user = await User.findOne({_id: idUser})
+
+            if(!user) {
+                return res.status(400).json({success: false, message: "Can't find this user!"})
+            }
+
+            user = user.toObject();
+
+            user.fullname = fullname;
+            user.phone = phone;
+            user.email = email;
+            // user.dateOfBirth = dateOfBirth;
+            user.address = address;
+
+            delete user.role
+            delete user._id
+            delete user.username
+            delete user.password 
+            delete user.avatar 
+            delete user.__v
+
+            await User.updateOne({_id: idUser}, {
+                $set: user
+            })
+
+            return res.status(200).json({success: true, message: "Update profile successfully!", data: user})
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({success: false, message: "Internal server error!"})
+        }
     }
 
     async getProfile(req, res, next) {
         try {
-            const user = await User.findOne({
+            let user = await User.findOne({
                 _id: req.userID
             })
 
@@ -23,21 +51,18 @@ class UserController {
                 })
             }
 
-            let tempUser = {}
-            tempUser.role = i.role
-            tempUser.username = i.username
-            tempUser.fullname = i.fullname
-            tempUser.phone = i.phone
-            tempUser.email = i.email
-            tempUser.dateOfBirth = i.dateOfBirth
-            tempUser.address = i.address
-            tempUser.avatar = i.avatar
+            user = user.toObject()
 
+            delete user._id
+            delete user.username
+            delete user.password 
+            delete user.__v
+            
             // all goood
             return res.status(200).json({
                 success: true,
                 message: "Get profile of this user successfully!",
-                data: tempUser
+                data: user
             })
         } catch (error) {
             console.log("Error in UserController: " + error)
@@ -61,19 +86,17 @@ class UserController {
                 })
             }
 
-            // delete password
-            for (let i of users) {
-                let tempUser = {}
-                tempUser.role = i.role
-                tempUser.username = i.username
-                tempUser.fullname = i.fullname
-                tempUser.phone = i.phone
-                tempUser.email = i.email
-                tempUser.dateOfBirth = i.dateOfBirth
-                tempUser.address = i.address
-                tempUser.avatar = i.avatar
-                result.push(tempUser)
-            }
+
+            users.map(item => {
+                let objectItem = item.toObject()
+
+                delete objectItem._id
+                delete objectItem.username
+                delete objectItem.password 
+                delete objectItem.__v
+
+                result.push(objectItem)
+            } )
 
             return res.status(200).json({
                 success: true,
