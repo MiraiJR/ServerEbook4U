@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const FavouriteBook = new Schema({
-    username: {
+    user: {
         type: Schema.Types.ObjectId,
         ref: "users",
         required: true
