@@ -3,7 +3,7 @@ const Category = require("../models/Category.js")
 const slugify = require("slugify")
 
 class SearchController {
-    async filterDemo(req, res, next) {
+    async filter(req, res, next) {
         try {
             let {
                 q,
