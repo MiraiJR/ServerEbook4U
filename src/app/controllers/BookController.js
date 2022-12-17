@@ -2,6 +2,7 @@ const Category = require("../models/Category.js")
 const Book = require("../models/Book.js")
 const Chapter = require("../models/Chapter.js")
 const Comment = require("../models/Comment.js")
+const slugify = require("slugify")
 
 class BookController {
     async getAllBook(req, res, next) {
@@ -230,7 +231,81 @@ class BookController {
     }
 
     async editBook(req, res, next) {
+        try {
+            const idBook = req.params.id
 
+            const {
+                name,
+                description,
+                author,
+                category,
+                country
+            } = req.body
+
+            let updateBook
+
+            if (!req.file) {
+                updateBook = await Book.findOneAndUpdate({
+                    _id: idBook
+                }, {
+                    $set: {
+                        name,
+                        description,
+                        author,
+                        category,
+                        country,
+                        slug: slugify(name, {
+                            replacement: "-",
+                            lower: true,
+                            trim: true
+                        }),
+                        updatedAt: Date.now()
+                    }
+                })
+            } else {
+                updateBook = await Book.findOneAndUpdate({
+                    _id: idBook
+                }, {
+                    $set: {
+                        name,
+                        description,
+                        author,
+                        category,
+                        country,
+                        slug: slugify(name, {
+                            replacement: "-",
+                            lower: true,
+                            trim: true
+                        }),
+                        image: req.file.path,
+                        updatedAt: Date.now()
+                    }
+                })
+            }
+
+            updateBook = await Book.findOne({
+                _id: idBook
+            })
+
+            if (!updateBook) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't find this book!"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "updated book successfully!",
+                data: updateBook
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
     }
 }
 

@@ -2,12 +2,14 @@ require("dotenv").config()
 const express = require("express")
 const path = require("path")
 const methodOverride = require("method-override")
-const route = require("./routes/index.js")
 const connectDB = require("./database/connectDB.js")
 const session = require("express-session")
+const route = require("./routes/index.js")
+const notifcation = require("./app/Socket/NotificationSocket.js")
 // const cors = require("cors")
 
 const app = express()
+const server = require('http').createServer(app)
 
 app.use(express.urlencoded({
     extended: true
@@ -28,6 +30,7 @@ app.use(session({
 // avoid the blocked request of the backend
 // app.use(cors)
 
+
 // connect to DB mongodb
 connectDB()
 
@@ -38,6 +41,8 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!')
 })
 
+// connect socketio
+notifcation(server)
 route(app)
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+server.listen(PORT, () => console.log(`Server started on port ${PORT}`))

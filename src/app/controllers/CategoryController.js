@@ -4,12 +4,12 @@ const Book = require("../models/Book.js")
 class CategoryController {
     async createCategory(req, res, next) {
         const {
-            name
+            nameCategory
         } = req.body
 
         try {
             const newCategory = new Category({
-                name
+                name: nameCategory
             })
 
             await newCategory.save()

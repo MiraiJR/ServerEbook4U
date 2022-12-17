@@ -41,7 +41,9 @@ class AuthController {
 
             //all good 
             // accessToken to authencate
-            const accessToken = jwt.sign({userID: user._id}, process.env.ACCESS_TOKEN_SECRET)
+            const accessToken = jwt.sign({
+                userID: user._id
+            }, process.env.ACCESS_TOKEN_SECRET)
 
             return res.status(200).json({
                 success: true,
@@ -61,10 +63,19 @@ class AuthController {
         try {
             const {
                 username,
-                password
+                password,
+                email,
+                retypePassword,
+                fullname
             } = req.body
 
             // check validation
+            if (password != retypePassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Retype password don't match!"
+                })
+            }
 
             // check username existed
             const isExisted = await User.findOne({
@@ -72,7 +83,6 @@ class AuthController {
             })
 
             if (isExisted) {
-                console.log("zo")
                 return res.status(400).json({
                     success: false,
                     message: "Username is used! Please using another one!"
@@ -91,7 +101,9 @@ class AuthController {
             // create newUser and add to database
             const newUser = new User({
                 username,
-                password: pwEncrypt
+                password: pwEncrypt,
+                email,
+                fullname
             })
 
             await newUser.save()
@@ -114,7 +126,10 @@ class AuthController {
 
     async logout(req, res, next) {
         req.session.user = ""
-        return res.status(200).json({success: true, message: "logout successfully!"})
+        return res.status(200).json({
+            success: true,
+            message: "logout successfully!"
+        })
     }
 }
 
