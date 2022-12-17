@@ -6,6 +6,7 @@ const favoriteController = require("../app/controllers/FavoriteController.js")
 
 const { verifyToken } = require("../middleware/Auth.js")
 
+// interact with profile
 router.get("/me", verifyToken, userController.getProfile)
 router.put("/me", verifyToken, userController.editProfile)
 

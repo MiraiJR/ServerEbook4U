@@ -94,7 +94,20 @@ class UserController {
 
     async getAllProfileUser(req, res, next) {
         try {
-            const users = await User.find()
+            // const users = await User.find()
+            const users = await User.aggregate([{
+                $project: {
+                    username: 1,
+                    fullname: 1,
+                    phone: 1,
+                    email: 1,
+                    dateOfBirth: 1,
+                    address: 1,
+                    avatar: 1,
+                    role: 1,
+                    _id: 0
+                }
+            }])
 
             if (!users) {
                 return res.status(400).json({
