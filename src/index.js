@@ -6,7 +6,7 @@ const connectDB = require("./database/connectDB.js")
 const session = require("express-session")
 const route = require("./routes/index.js")
 const notifcation = require("./app/Socket/NotificationSocket.js")
-// const cors = require("cors")
+const cors = require("cors")
 
 const app = express()
 const server = require('http').createServer(app)
@@ -28,8 +28,7 @@ app.use(session({
 }))
 
 // avoid the blocked request of the backend
-// app.use(cors)
-
+app.use(cors())
 
 // connect to DB mongodb
 connectDB()
