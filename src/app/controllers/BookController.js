@@ -74,12 +74,20 @@ class BookController {
 
     async getBookFollowID(req, res, next) {
         const idBook = req.params.id
+
         try {
-            const book = await Book.findOne({
+            // update view when get api book
+            await Book.updateOne({
                 _id: idBook
+            }, {
+                $inc: {
+                    view: 1
+                }
             })
 
-            // update view
+            const book = await Book.findOne({
+                _id: idBook
+            }).populate("category").populate("country")
 
             // get Chapter
             const chapters = await Chapter.find({

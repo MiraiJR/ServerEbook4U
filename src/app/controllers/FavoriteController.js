@@ -1,3 +1,4 @@
+const Book = require("../models/Book.js")
 const FavoriteBook = require("../models/FavouriteBook.js")
 
 class FavoriteController {
@@ -35,6 +36,14 @@ class FavoriteController {
         try {
             const idUser = req.userID
             const idBook = req.body.idBook
+
+            await Book.updateOne({
+                _id: idBook
+            }, {
+                $inc: {
+                    numberOfFavorites: 1
+                }
+            })
 
             const userFavoriteBook = await FavoriteBook.findOne({
                 user: idUser
@@ -89,6 +98,15 @@ class FavoriteController {
         try {
             const idUser = req.userID
             const idBook = req.body.idBook
+
+            // when anyone remove, we reduce the field "numberOfFavorites" 1 
+            await Book.updateOne({
+                _id: idBook
+            }, {
+                $inc: {
+                    numberOfFavorites: 1
+                }
+            })
 
             const userFavoriteBook = await FavoriteBook.findOne({
                 user: idUser

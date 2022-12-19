@@ -25,7 +25,7 @@ router.delete("/category/:id", verifyToken, verifyRole)
 router.get("/category/:id", bookController.getBooksOfCategory)
 
 // interact with country
-router.post("/country/all")
+router.get("/country/all")
 router.post("/country", verifyToken, verifyRole, countryController.createCountry)
 router.delete("/country/:id", verifyToken, verifyRole, countryController.deleteCountry)
 router.get("/country/:id")
@@ -48,7 +48,6 @@ router.delete("/chapter/:id", verifyToken, verifyRole)
 
 // interact with user
 router.get("/user/all", userController.getAllProfileUser)
-// router.post("/user/checking", verifyToken, userController.editProfile)
 
 // interact with comment 
 router.post("/comment", verifyToken, commentController.addNewComment)
