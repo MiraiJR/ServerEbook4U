@@ -5,21 +5,21 @@ const fs = require("fs")
 
 class CountryController {
     async createCountry(req, res, next) {
-        try {
-            await fs.readFile("test.json", "utf8", async (err, data) => {
-                const obj = JSON.parse(data);
-                for (let country of obj) {
-                    const newCountry = new Country({
-                        name: country.name.common
-                    })
+        const {
+            nameCountry
+        } = req.body
 
-                    await newCountry.save()
-                }
+        try {
+            const newCountry = new Country({
+                name: nameCountry
             })
+
+            await newCountry.save()
 
             return res.status(200).json({
                 success: true,
-                message: "create country successfully!"
+                message: "Create new country successfully!",
+                data: newCountry
             })
         } catch (error) {
             console.log(error)
@@ -28,7 +28,34 @@ class CountryController {
                 message: "Internal server error!"
             })
         }
+
     }
+
+    // async createCountry(req, res, next) {
+    //     try {
+    //         await fs.readFile("test.json", "utf8", async (err, data) => {
+    //             const obj = JSON.parse(data);
+    //             for (let country of obj) {
+    //                 const newCountry = new Country({
+    //                     name: country.name.common
+    //                 })
+
+    //                 await newCountry.save()
+    //             }
+    //         })
+
+    //         return res.status(200).json({
+    //             success: true,
+    //             message: "create country successfully!"
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //         return res.status(500).json({
+    //             success: false,
+    //             message: "Internal server error!"
+    //         })
+    //     }
+    // }
 
     async deleteCountry(req, res, next) {
         const idCountry = req.params.id

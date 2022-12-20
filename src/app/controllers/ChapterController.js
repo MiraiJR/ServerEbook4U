@@ -7,21 +7,21 @@ const {
 
 class ChapterController {
     async createChapter(req, res, next) {
-        let contentImage = []
-
-        const {
-            name,
-            idBook,
-            contentText
-        } = req.body
-
-        if(req.files) {
-            for(let i of req.files) {
-                contentImage.push(i.path)
-            }
-        }
-
         try {
+            let contentImage = []
+            const idBook = req.params.id
+
+            const {
+                name,
+                contentText
+            } = req.body
+
+            if (req.files) {
+                for (let i of req.files) {
+                    contentImage.push(i.path)
+                }
+            }
+
             const newChapter = new Chapter({
                 name,
                 book: idBook,
@@ -53,14 +53,24 @@ class ChapterController {
                 _id: idChapter
             })
 
-            if(!chapter) {
-                return res.status(400).json({success: false, message: "Can't get this chapter!"})
+            if (!chapter) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't get this chapter!"
+                })
             }
 
-            return res.status(200).json({success: true, message: "get chapter successfully!", data: chapter})
+            return res.status(200).json({
+                success: true,
+                message: "get chapter successfully!",
+                data: chapter
+            })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({success: false, message: "Internal server error!"})
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
         }
     }
 }

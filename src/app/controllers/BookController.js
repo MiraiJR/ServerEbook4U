@@ -7,7 +7,7 @@ const slugify = require("slugify")
 class BookController {
     async getAllBook(req, res, next) {
         try {
-            const books = await Book.find()
+            const books = await Book.find().populate("category").populate("country")
 
             if (!books) {
                 return res.status(400).json({
@@ -114,24 +114,6 @@ class BookController {
                     chapters,
                     comments
                 }
-            })
-        } catch (error) {
-            console.log(error)
-            return res.status(500).json({
-                success: false,
-                message: "Internal server error!"
-            })
-        }
-    }
-
-    async getAllBook(req, res, next) {
-        try {
-            const books = await Book.find()
-
-            return res.status(200).json({
-                success: true,
-                message: "Get all books successfully!",
-                data: books
             })
         } catch (error) {
             console.log(error)

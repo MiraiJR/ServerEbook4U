@@ -41,7 +41,7 @@ router.delete("/book/:id", verifyToken, verifyRole, bookController.deleteBook)
 router.put("/book/:id", verifyToken, verifyRole, bookController.editBook)
 
 // interact with chapter
-router.post("/chapter", verifyToken, verifyRole, fileUploader.array("file"), chapterController.createChapter)
+router.post("/chapter/:id", verifyToken, verifyRole, fileUploader.array("file"), chapterController.createChapter)
 router.get("/chapter/:id", chapterController.getChapter)
 router.put("/chapter/:id", verifyToken, verifyRole)
 router.delete("/chapter/:id", verifyToken, verifyRole)
