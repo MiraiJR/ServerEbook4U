@@ -297,6 +297,60 @@ class BookController {
             })
         }
     }
+
+    async getTopThreeBookFollowView(req, res, next) {
+        try {
+            const books = await Book.find().sort({
+                "view": 1
+            }).limit(3)
+
+            if (!books) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't get!"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Get top 3 the most viewed book successfully!",
+                data: books
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
+    async getTopThreeBookFollowFavorite(req, res, next) {
+        try {
+            const books = await Book.find().sort({
+                "numberOfFavorites": 1
+            }).limit(3)
+
+            if (!books) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't get!"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Get top 3 the most favorite book successfully!",
+                data: books
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
 }
 
 module.exports = new BookController()

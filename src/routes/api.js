@@ -39,6 +39,8 @@ router.get("/book/all", bookController.getAllBook)
 router.get("/book/:id", bookController.getBookFollowID)
 router.delete("/book/:id", verifyToken, verifyRole, bookController.deleteBook)
 router.put("/book/:id", verifyToken, verifyRole, bookController.editBook)
+router.get("/book/top/viewed", bookController.getTopThreeBookFollowView)
+router.get("/book/top/favorite", bookController.getTopThreeBookFollowFavorite)
 
 // interact with chapter
 router.post("/chapter/:id", verifyToken, verifyRole, fileUploader.array("file"), chapterController.createChapter)
