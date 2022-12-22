@@ -4,6 +4,7 @@ const router = express.Router()
 const userController = require("../app/controllers/UserController.js")
 const favoriteController = require("../app/controllers/FavoriteController.js")
 const reportController = require("../app/controllers/ReportController.js")
+const notifyController = require("../app/controllers/NotifyController.js")
 
 const { verifyToken } = require("../middleware/Auth.js")
 
@@ -18,5 +19,9 @@ router.delete("/me/favorite-book", verifyToken, favoriteController.removeBookFro
 
 // interact with report
 router.post("/me/report/:type/:object", verifyToken, reportController.createReport)
+
+// interact with notify
+router.get("/me/notify", verifyToken, notifyController.getNotificationOfUser)
+router.get("/me/notify/:id", verifyToken, notifyController.changeStatus)
 
 module.exports = router

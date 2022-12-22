@@ -5,7 +5,7 @@ const Notification = new Schema({
     receiver: {
         type: Schema.Types.ObjectId,
         ref: "users",
-        required: true,
+        required: true
     },
     content: {
         type: String,
@@ -13,7 +13,7 @@ const Notification = new Schema({
     },
     createdAt: {
         type: Date,
-        dafault: Date.now(),
+        dafault: Date.now()
     },
     status: { // Status notification if status = 0 is same mean "this notification isn't read" else 1 "this notification is read"
         type: Boolean,
@@ -26,4 +26,4 @@ const Notification = new Schema({
     }
 })
 
-module.exports = mongoose.model("Notifications", Notification)
+module.exports = mongoose.model("notifications", Notification)

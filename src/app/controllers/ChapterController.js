@@ -4,6 +4,10 @@ const Chapter = require("../models/Chapter.js")
 const {
     convert
 } = require('html-to-text');
+const {
+    findListUserLikeThisBook,
+    pushNotification
+} = require("../../middleware/helper.js")
 
 class ChapterController {
     async createChapter(req, res, next) {
@@ -30,6 +34,14 @@ class ChapterController {
             })
 
             await newChapter.save()
+
+            const book = await Book.findOne({
+                _id: idBook
+            })
+
+            // Notify to the users who favorite this book
+            const contentNotify = `Sách ${book.name} vừa cập nhật thêm chương mới là ${name}. Đọc ngay nào!`
+            await pushNotification(contentNotify, idBook)
 
             return res.status(200).json({
                 success: true,
