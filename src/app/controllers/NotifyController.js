@@ -7,7 +7,7 @@ class NotifyController {
 
             const notifications = await Notification.find({
                 receiver: idUser
-            }).populate("book").sort({
+            }).populate("object").sort({
                 createdAt: 1
             })
 

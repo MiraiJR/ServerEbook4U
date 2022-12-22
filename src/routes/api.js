@@ -8,7 +8,6 @@ const chapterController = require("../app/controllers/ChapterController.js")
 const authorController = require("../app/controllers/AuthorController.js")
 const userController = require("../app/controllers/UserController.js")
 const commentController = require("../app/controllers/CommentController.js")
-const reportController = require("../app/controllers/ReportController.js")
 const fileUploader = require("../database/CloudinaryConfig.js")
 
 // middleware
@@ -55,8 +54,5 @@ router.get("/user/all", userController.getAllProfileUser)
 router.post("/comment", verifyToken, commentController.addNewComment)
 router.post("/comment/answer", verifyToken, commentController.addAnswerForComment)
 router.delete("/comment/:id", verifyToken, commentController.deleteComment)
-
-// interact with report
-router.get("/report/all", verifyToken, verifyRole, reportController.getAllReport)
 
 module.exports = router

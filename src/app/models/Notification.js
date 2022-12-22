@@ -19,10 +19,15 @@ const Notification = new Schema({
         type: Boolean,
         dafault: false
     },
-    book: {
+    object: {
         type: Schema.Types.ObjectId,
-        ref: "books",
-        required: true
+        required: true,
+        refPath: "type"
+    },
+    type: {
+        type: String,
+        enum: ["books", "reports", "comments", "users"],
+        default: "books"
     }
 })
 

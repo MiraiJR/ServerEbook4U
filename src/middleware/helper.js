@@ -1,3 +1,6 @@
+const {
+    ObjectID
+} = require("bson")
 const FavouriteBook = require("../app/models/FavouriteBook.js")
 const Notification = require("../app/models/Notification.js")
 
@@ -9,7 +12,7 @@ const findListUserLikeThisBook = async (idBook) => {
     return result
 }
 
-const pushNotification = async (content, book) => {
+const pushNotification = async (content, type, id) => {
     const listReceiver = await findListUserLikeThisBook(book)
 
     if (listReceiver != 0) {
@@ -17,7 +20,8 @@ const pushNotification = async (content, book) => {
             const newNotify = new Notification({
                 receiver: i.user,
                 content,
-                book,
+                type,
+                object: id,
                 createdAt: Date.now(),
                 status: false
             })
@@ -27,7 +31,21 @@ const pushNotification = async (content, book) => {
     }
 }
 
+const pushNotificationToAdmin = async (content, type, id) => {
+    const newNotify = new Notification({
+        receiver: new ObjectID("639d6ce91ba5712897dd1926"), //admin
+        content,
+        type,
+        object: id,
+        createdAt: Date.now(),
+        status: false
+    })
+
+    await newNotify.save()
+}
+
 module.exports = {
     findListUserLikeThisBook,
-    pushNotification
+    pushNotification,
+    pushNotificationToAdmin
 }

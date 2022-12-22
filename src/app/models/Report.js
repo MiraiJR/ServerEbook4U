@@ -7,19 +7,24 @@ const Report = new Schema({
         ref: "users",
         required: true
     },
-    type: {
-        type: String,
-        enum: ["book", "comment", "user"],
-        required: true
-    }, 
     reason: {
         type: String,
         required: true
     },
     object: {
         type: Schema.Types.ObjectId,
+        required: true,
+        refPath: 'type'
+    },
+    type: {
+        type: String,
+        enum: ["books", "comments", "users"],
         required: true
-    }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
 })
 
 module.exports = mongoose.model("reports", Report)

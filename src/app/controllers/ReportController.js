@@ -1,79 +1,12 @@
 const Report = require("../models/Report.js")
+const {
+    pushNotificationToAdmin
+} = require("../../middleware/helper.js")
 
 class ReportController {
     async getAllReport(req, res, next) {
         try {
-            let reports = []
-
-            const reportBooks = await Report.aggregate([{
-                    $match: {
-                        type: "book"
-                    }
-                }, {
-                    "$lookup": {
-                        "from": "users",
-                        "localField": "reporter",
-                        "foreignField": "_id",
-                        "as": "reporter"
-                    }
-                },
-                {
-                    "$lookup": {
-                        "from": "books",
-                        "localField": "object",
-                        "foreignField": "_id",
-                        "as": "object"
-                    }
-                }
-            ])
-
-            const reportUsers = await Report.aggregate([{
-                    $match: {
-                        type: "user"
-                    }
-                }, {
-                    "$lookup": {
-                        "from": "users",
-                        "localField": "reporter",
-                        "foreignField": "_id",
-                        "as": "reporter"
-                    }
-                },
-                {
-                    "$lookup": {
-                        "from": "books",
-                        "localField": "object",
-                        "foreignField": "_id",
-                        "as": "object"
-                    }
-                }
-            ])
-
-            const reportComments = await Report.aggregate([{
-                    $match: {
-                        type: "comment"
-                    }
-                }, {
-                    "$lookup": {
-                        "from": "users",
-                        "localField": "reporter",
-                        "foreignField": "_id",
-                        "as": "reporter"
-                    }
-                },
-                {
-                    "$lookup": {
-                        "from": "comments",
-                        "localField": "object",
-                        "foreignField": "_id",
-                        "as": "object"
-                    }
-                }
-            ])
-
-            reports = reports.concat(reportBooks)
-            reports = reports.concat(reportUsers)
-            reports = reports.concat(reportComments)
+            const reports = await Report.find().populate("reporter").populate("object")
 
             return res.status(200).json({
                 success: true,
@@ -104,6 +37,10 @@ class ReportController {
             })
 
             await newReport.save()
+
+            const content = `Người dùng có id "${newReport.reporter}" vừa báo cáo ${newReport.type} có id: "${newReport.object}"`
+
+            await pushNotificationToAdmin(content, "reports", newReport._id)
 
             return res.status(200).json({
                 success: true,
