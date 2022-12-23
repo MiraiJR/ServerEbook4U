@@ -6,7 +6,9 @@ const {
 class ReportController {
     async getAllReport(req, res, next) {
         try {
-            const reports = await Report.find().populate("reporter").populate("object")
+            const reports = await Report.find({
+                type: "users"
+            }).populate("reporter").populate("object")
 
             return res.status(200).json({
                 success: true,
