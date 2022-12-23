@@ -5,6 +5,7 @@ const userController = require("../app/controllers/UserController.js")
 const favoriteController = require("../app/controllers/FavoriteController.js")
 const reportController = require("../app/controllers/ReportController.js")
 const notifyController = require("../app/controllers/NotifyController.js")
+const historyController = require("../app/controllers/HistoryController.js")
 
 const {
     verifyToken
@@ -26,6 +27,11 @@ router.post("/me/report/:type/:object", verifyToken, reportController.createRepo
 router.get("/me/notify", verifyToken, notifyController.getNotificationOfUser)
 router.get("/me/notify/count", verifyToken, notifyController.countNotificationWithStatusFalse)
 router.put("/me/notify/:id", verifyToken, notifyController.changeStatus)
+
+// interact with history
+router.get("/me/history", verifyToken, historyController.getHistoryBook)
+router.post("/me/history", verifyToken, historyController.addBookToHistory)
+router.delete("/me/history", verifyToken, historyController.removeBookFromHistory)
 
 
 module.exports = router

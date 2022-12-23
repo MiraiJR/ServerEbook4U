@@ -7,8 +7,34 @@ const slugify = require("slugify")
 class BookController {
     async getAllBook(req, res, next) {
         try {
-            const books = await Book.find().populate("category").populate("country")
-
+            const books = await Book.aggregate([{
+                "$lookup": {
+                    "from": "categories",
+                    "localField": "category",
+                    "foreignField": "_id",
+                    "as": "category"
+                }
+            }, {
+                "$lookup": {
+                    "from": "countries",
+                    "localField": "country",
+                    "foreignField": "_id",
+                    "as": "country"
+                }
+            }, {
+                "$lookup": {
+                    "from": "chapters",
+                    "localField": "_id",
+                    "foreignField": "book",
+                    "as": "numberChapter"
+                }
+            }, {
+                "$set": {
+                    "numberChapter": {
+                        "$size": "$numberChapter"
+                    }
+                }
+            }])
             if (!books) {
                 return res.status(400).json({
                     success: false,
