@@ -48,7 +48,7 @@ router.put("/chapter/:id", verifyToken, verifyRole)
 router.delete("/chapter/:id", verifyToken, verifyRole)
 
 // interact with user
-router.get("/user/all", userController.getAllProfileUser)
+router.get("/user/all", verifyToken, verifyRole, userController.getAllProfileUser)
 
 // interact with comment 
 router.post("/comment", verifyToken, commentController.addNewComment)
