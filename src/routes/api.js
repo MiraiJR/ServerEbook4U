@@ -24,7 +24,7 @@ router.delete("/category/:id", verifyToken, verifyRole)
 router.get("/category/:id", bookController.getBooksOfCategory)
 
 // interact with country
-router.get("/country/all")
+router.get("/country/all", countryController.getAllCountry)
 router.post("/country", verifyToken, verifyRole, countryController.createCountry)
 router.delete("/country/:id", verifyToken, verifyRole, countryController.deleteCountry)
 router.get("/country/:id")

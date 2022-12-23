@@ -49,6 +49,29 @@ class NotifyController {
             })
         }
     }
+
+    async countNotificationWithStatusFalse(req, res, next) {
+        try {
+            const idUser = req.userID
+
+            const countNotifications = await Notification.countDocuments({
+                receiver: idUser,
+                status: false
+            })
+
+            return res.status(200).json({
+                success: true,
+                message: "Get notification successfully!",
+                data: countNotifications
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
 }
 
 module.exports = new NotifyController()

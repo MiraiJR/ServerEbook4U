@@ -77,6 +77,24 @@ class CountryController {
             })
         }
     }
+
+    async getAllCountry(req, res, next) {
+        try {
+            const countries = await Country.find()
+
+            return res.status(200).json({
+                success: true,
+                message: "Get all country successfully!",
+                data: countries
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
 }
 
 module.exports = new CountryController()

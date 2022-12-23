@@ -40,7 +40,7 @@ class ChapterController {
             })
 
             // Notify to the users who favorite this book
-            const contentNotify = `Sách ${book.name} vừa cập nhật thêm chương mới là ${name}. Đọc ngay nào!`
+            const contentNotify = `Sách "${book.name}" vừa cập nhật thêm chương mới là "${name}". Đọc ngay nào!`
             await pushNotification(contentNotify, "books", idBook)
 
             return res.status(200).json({

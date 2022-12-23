@@ -13,7 +13,7 @@ const findListUserLikeThisBook = async (idBook) => {
 }
 
 const pushNotification = async (content, type, id) => {
-    const listReceiver = await findListUserLikeThisBook(book)
+    const listReceiver = await findListUserLikeThisBook(id)
 
     if (listReceiver != 0) {
         for (let i of listReceiver) {

@@ -6,7 +6,9 @@ const favoriteController = require("../app/controllers/FavoriteController.js")
 const reportController = require("../app/controllers/ReportController.js")
 const notifyController = require("../app/controllers/NotifyController.js")
 
-const { verifyToken } = require("../middleware/Auth.js")
+const {
+    verifyToken
+} = require("../middleware/Auth.js")
 
 // interact with profile
 router.get("/me", verifyToken, userController.getProfile)
@@ -22,6 +24,8 @@ router.post("/me/report/:type/:object", verifyToken, reportController.createRepo
 
 // interact with notify
 router.get("/me/notify", verifyToken, notifyController.getNotificationOfUser)
-router.get("/me/notify/:id", verifyToken, notifyController.changeStatus)
+router.get("/me/notify/count", verifyToken, notifyController.countNotificationWithStatusFalse)
+router.put("/me/notify/:id", verifyToken, notifyController.changeStatus)
+
 
 module.exports = router

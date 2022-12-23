@@ -17,5 +17,7 @@ router.get("/report/all", verifyToken, verifyRole, reportController.getAllReport
 
 // interact with notify
 router.get("/notify", verifyToken, verifyRole, notifyController.getNotificationOfUser)
+router.put("/notify/:id", verifyToken, notifyController.changeStatus)
+router.get("/notify/count", verifyToken, verifyRole, notifyController.countNotificationWithStatusFalse)
 
 module.exports = router
