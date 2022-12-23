@@ -10,13 +10,6 @@ class FavoriteController {
                 user: idUser
             }).populate("books")
 
-            if (!userFavoriteBook) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Can't find favorite list of the user!"
-                })
-            }
-
             return res.status(200).json({
                 success: true,
                 message: "Get favorite list of the user successfully!",
