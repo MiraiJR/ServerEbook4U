@@ -1,6 +1,28 @@
 const Comment = require("../models/Comment.js")
 
 class CommentController {
+    async getCommentOfBook(req, res, next) {
+        try {
+            const idBook = req.params.id
+
+            const comments = await Comment.find({
+                book: idBook
+            }).populate("user", ["username", "avatar"]).populate("answer.user", ["username", "avatar"])
+
+            return res.status(200).json({
+                success: true,
+                message: "Get all comment of this book successfull!",
+                data: comments
+            })
+        } catch (error) {
+            console.log(error)
+            return res.json(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
     async addNewComment(req, res, next) {
         const user = req.userID
 
@@ -82,7 +104,7 @@ class CommentController {
 
     async addAnswerForComment(req, res, next) {
         const user = req.userID
-        
+
         const {
             idComment,
             contentComment
@@ -100,7 +122,11 @@ class CommentController {
 
             await comment.save()
 
-            return res.status(200).json({success: true, message: "Add answer for this comment successfully!", data: comment})
+            return res.status(200).json({
+                success: true,
+                message: "Add answer for this comment successfully!",
+                data: comment
+            })
         } catch (error) {
             console.log("Error in CommentController: " + error)
             return res.status(500).json({
