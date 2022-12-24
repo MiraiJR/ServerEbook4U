@@ -44,7 +44,7 @@ class AuthController {
             const accessToken = jwt.sign({
                 userID: user._id
             }, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: "1d"
+                expiresIn: "365d"
             })
 
             return res.status(200).json({
