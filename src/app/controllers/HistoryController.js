@@ -9,6 +9,14 @@ class HistoryController {
                 user: idUser
             }).populate("books")
 
+            if (!userHistoryBook) {
+                return res.status(200).json({
+                    success: true,
+                    message: "Get favorite list of the user successfully!",
+                    data: []
+                })
+            }
+
             return res.status(200).json({
                 success: true,
                 message: "Get favorite list of the user successfully!",
@@ -38,7 +46,7 @@ class HistoryController {
                 books.push(idBook)
 
                 // in case, user don't have list favorite book so we create new FavoriteBook
-                const newUserHistoryBook = new FavoriteBook({
+                const newUserHistoryBook = new History({
                     user: idUser,
                     books
                 })
@@ -60,7 +68,7 @@ class HistoryController {
 
             await userHistoryBook.save()
 
-            const result = await FavoriteBook.findOne({
+            const result = await History.findOne({
                 user: idUser
             }).populate("books")
 

@@ -10,6 +10,14 @@ class FavoriteController {
                 user: idUser
             }).populate("books")
 
+            if (!userFavoriteBook) {
+                return res.status(200).json({
+                    success: true,
+                    message: "Get favorite list of the user successfully!",
+                    data: []
+                })
+            }
+
             return res.status(200).json({
                 success: true,
                 message: "Get favorite list of the user successfully!",
