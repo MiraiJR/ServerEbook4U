@@ -106,7 +106,7 @@ class UserController {
                     avatar: 1,
                     role: 1,
                     status: 1,
-                    _id: 0
+                    _id: 1
                 }
             }])
 
