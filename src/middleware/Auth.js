@@ -27,6 +27,28 @@ const verifyToken = (req, res, next) => {
     }
 }
 
+const verifyRoleAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            _id: req.userID
+        })
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Can't not get this user!"
+            })
+        }
+
+        if (user.role != "Admin") {
+            return res.redirect("http://localhost:3000")
+        }
+    } catch (error) {
+        console.log(error)
+        return res.redirect("http://localhost:3000")
+    }
+}
+
 // chekc role of account because in some action, only admin can take action
 const verifyRole = async (req, res, next) => {
     try {
@@ -94,5 +116,6 @@ const checkStatusAccount = async (req, res, next) => {
 module.exports = {
     verifyToken,
     verifyRole,
-    checkStatusAccount
+    checkStatusAccount,
+    verifyRoleAdmin
 }
