@@ -19,11 +19,11 @@ const verifyToken = (req, res, next) => {
         req.userID = verify.userID
         next()
     } catch (error) {
-        console.log("Error in function verifyToken" + error)
-        return res.status(403).json({
-            success: false,
-            message: "Invalid token"
-        })
+        // return res.status(403).json({
+        //     success: false,
+        //     message: "Invalid token"
+        // })
+        return res.redirect("http://localhost:3000/login")
     }
 }
 

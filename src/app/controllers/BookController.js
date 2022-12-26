@@ -3,6 +3,12 @@ const Book = require("../models/Book.js")
 const Chapter = require("../models/Chapter.js")
 const Comment = require("../models/Comment.js")
 const slugify = require("slugify")
+const fs = require("fs")
+const {
+    getBooks,
+    searchBooks,
+    getPer
+} = require("../../middleware/HelperQuery.js")
 
 class BookController {
     async getAllBook(req, res, next) {
@@ -367,6 +373,89 @@ class BookController {
             return res.status(200).json({
                 success: true,
                 message: "Get top 3 the most favorite book successfully!",
+                data: books
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
+    async initBookFromFile(req, res, next) {
+        try {
+            await fs.readFile("books.json", "utf8", async (err, data) => {
+                const obj = JSON.parse(data);
+                for (let i of obj) {
+                    const category = await Category.findOne({
+                        name: i.category[0].name
+                    })
+
+                    let categories = []
+                    categories.push(category._id)
+
+                    const newBook = new Book({
+                        name: i.name,
+                        description: i.description,
+                        author: i.author,
+                        category: categories,
+                        country: new ObjectID("63a976915192960b76814853"),
+                        image: i.image
+                    })
+
+                    await newBook.save()
+
+                    for (let j of i.chapters) {
+                        console.log(j.name)
+                        const newChapter = new Chapter({
+                            name: j.name,
+                            book: newBook._id,
+                            contentText: j.content
+                        })
+
+                        await newChapter.save()
+                    }
+                }
+            })
+
+            return res.status(200).json({
+                success: true,
+                message: "Create book and chapters of this book successfully!"
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
+    }
+
+    async getPageBook(req, res, next) {
+        try {
+            const {
+                per,
+                page,
+                q,
+                category,
+                country
+            } = req.query
+
+            let books = []
+
+            if (!q && !category && !country) {
+                books = await getBooks()
+            } else {
+                books = await searchBooks(q, category, country)
+            }
+
+            books = await getPer(books, per, page)
+
+            return res.status(200).json({
+                success: true,
+                message: "Successfully!",
                 data: books
             })
         } catch (error) {

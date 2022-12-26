@@ -96,19 +96,29 @@ class UserController {
         try {
             // const users = await User.find()
             const users = await User.aggregate([{
-                $project: {
-                    username: 1,
-                    fullname: 1,
-                    phone: 1,
-                    email: 1,
-                    dateOfBirth: 1,
-                    address: 1,
-                    avatar: 1,
-                    role: 1,
-                    status: 1,
-                    _id: 1
+                    "$match": {
+                        "role": {
+                            "$ne": "Admin"
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        username: 1,
+                        fullname: 1,
+                        phone: 1,
+                        email: 1,
+                        dateOfBirth: 1,
+                        address: 1,
+                        avatar: 1,
+                        role: 1,
+                        status: 1,
+                        _id: 1
+                    }
                 }
-            }])
+            ])
+
+
 
             if (!users) {
                 return res.status(400).json({

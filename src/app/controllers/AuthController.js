@@ -2,6 +2,7 @@ const User = require("../models/User.js")
 const jwt = require("jsonwebtoken")
 const CryptoJS = require("crypto-js")
 const hashLength = 64
+const nodemailer = require("../configs/nodemailer.js")
 
 class AuthController {
     async login(req, res, next) {
@@ -44,8 +45,17 @@ class AuthController {
             const accessToken = jwt.sign({
                 userID: user._id
             }, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: "365d"
+                expiresIn: '365d'
             })
+
+            if (user.role == "Admin") {
+                return res.status(200).json({
+                    success: true,
+                    message: "Login successfully!",
+                    accessToken,
+                    admin: true
+                })
+            }
 
             return res.status(200).json({
                 success: true,
@@ -131,6 +141,69 @@ class AuthController {
             success: true,
             message: "logout successfully!"
         })
+    }
+
+    async forgetPassword(req, res, next) {
+        try {
+            const {
+                username
+            } = req.body
+
+            const curUser = await User.findOne({
+                username
+            })
+
+            if (!curUser) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Username don't exist!"
+                })
+            }
+
+            const salt = Date.now().toString(16)
+            const pwSalt = "123" + salt
+            const pwHashed = CryptoJS.SHA3(pwSalt, {
+                outputLength: hashLength * 4
+            }).toString(CryptoJS.enc.Hex)
+            const pwEncrypt = pwHashed + salt
+
+            var objectMail = { // thiết lập đối tượng, nội dung gửi mail
+                from: 'Admin EBook4U <no:reply>',
+                to: `${curUser.email}`,
+                subject: `RESET PASSWORD USERNAME: ${curUser.username}`,
+                html: `<div>Hello ${curUser.username},</div>
+                        <div>Password reset: <strong>"123"</strong></div>
+                        <div>Please remember this password to login my website</div>
+                        <div>Thank for using my website. </div>
+                        `
+            }
+
+            nodemailer.sendMail(objectMail, async (err, info) => {
+                if (err) {
+                    console.log(err)
+                } else {
+
+                    await User.updateOne({
+                        _id: curUser._id
+                    }, {
+                        $set: {
+                            password: pwEncrypt
+                        }
+                    })
+
+                    return res.status(200).json({
+                        success: true,
+                        message: "Mail is sent. Please Check mail to get new password!"
+                    })
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error!"
+            })
+        }
     }
 }
 
