@@ -68,7 +68,8 @@ class AuthController {
                 password,
                 email,
                 retypePassword,
-                fullname
+                fullname,
+                dateOfBirth
             } = req.body
 
             // check validation
@@ -105,13 +106,11 @@ class AuthController {
                 username,
                 password: pwEncrypt,
                 email,
-                fullname
+                fullname,
+                dateOfBirth
             })
 
             await newUser.save()
-
-            // generate token 
-            // const accessToken = jwt.
 
             return res.status(200).json({
                 success: true,
