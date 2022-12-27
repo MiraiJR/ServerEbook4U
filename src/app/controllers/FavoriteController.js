@@ -105,7 +105,7 @@ class FavoriteController {
                 _id: idBook
             }, {
                 $inc: {
-                    numberOfFavorites: 1
+                    numberOfFavorites: -1
                 }
             })
 

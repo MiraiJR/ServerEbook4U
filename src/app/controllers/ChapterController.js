@@ -1,11 +1,11 @@
 const Category = require("../models/Category.js")
+const Comment = require("../models/Comment.js")
 const Book = require("../models/Book.js")
 const Chapter = require("../models/Chapter.js")
 const {
     convert
 } = require('html-to-text');
 const {
-    findListUserLikeThisBook,
     pushNotification
 } = require("../../middleware/helper.js")
 
@@ -65,6 +65,10 @@ class ChapterController {
                 _id: idChapter
             })
 
+            const comments = await Comment.find({
+                book: chapter.book
+            }).populate("user", ["username", "avatar"]).populate("answer.user", ["username", "avatar"])
+
             if (!chapter) {
                 return res.status(400).json({
                     success: false,
@@ -75,7 +79,10 @@ class ChapterController {
             return res.status(200).json({
                 success: true,
                 message: "get chapter successfully!",
-                data: chapter
+                data: {
+                    chapter,
+                    comments
+                }
             })
         } catch (error) {
             console.log(error)
