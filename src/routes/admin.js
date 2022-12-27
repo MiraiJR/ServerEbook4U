@@ -9,6 +9,7 @@ const {
 const adminController = require("../app/controllers/AdminController.js")
 const reportController = require("../app/controllers/ReportController.js")
 const notifyController = require("../app/controllers/NotifyController.js")
+const commentController = require("../app/controllers/CommentController.js")
 
 router.put("/user/:id/:status", verifyToken, verifyRole, adminController.banOrUnbanAccount)
 
@@ -19,5 +20,8 @@ router.get("/report/all", verifyToken, verifyRole, reportController.getAllReport
 router.get("/notify", verifyToken, verifyRole, notifyController.getNotificationOfUser)
 router.put("/notify/:id", verifyToken, notifyController.changeStatus)
 router.get("/notify/count", verifyToken, verifyRole, notifyController.countNotificationWithStatusFalse)
+
+// interact with comment
+router.delete("/comment/:id", verifyToken, verifyRole, commentController.adminDeleteComment)
 
 module.exports = router

@@ -54,9 +54,6 @@ router.delete("/chapter/:id", verifyToken, verifyRole)
 router.get("/user/all", verifyToken, verifyRole, userController.getAllProfileUser)
 
 // interact with comment 
-router.post("/comment", verifyToken, commentController.addNewComment)
-router.post("/comment/answer", verifyToken, commentController.addAnswerForComment)
-router.delete("/comment/:id", verifyToken, commentController.deleteComment)
 router.get("/comment/:id", verifyToken, commentController.getCommentOfBook)
 
 module.exports = router

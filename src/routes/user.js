@@ -6,6 +6,7 @@ const favoriteController = require("../app/controllers/FavoriteController.js")
 const reportController = require("../app/controllers/ReportController.js")
 const notifyController = require("../app/controllers/NotifyController.js")
 const historyController = require("../app/controllers/HistoryController.js")
+const commentController = require("../app/controllers/CommentController.js")
 
 const {
     verifyToken
@@ -35,5 +36,9 @@ router.get("/me/history", verifyToken, historyController.getHistoryBook)
 router.post("/me/history", verifyToken, historyController.addBookToHistory)
 router.delete("/me/history", verifyToken, historyController.removeBookFromHistory)
 
+// interact with comment
+router.post("/comment", verifyToken, commentController.addNewComment)
+router.post("/comment/answer", verifyToken, commentController.addAnswerForComment)
+router.delete("/comment/:id", verifyToken, commentController.deleteComment)
 
 module.exports = router

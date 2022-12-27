@@ -80,7 +80,7 @@ class CommentController {
             if (comment.user != user) {
                 return res.status(400).json({
                     success: false,
-                    message: "You don't have permission to take action with this comment!"
+                    message: "You don't have permission to delete this comment!"
                 })
             }
 
@@ -135,6 +135,39 @@ class CommentController {
             })
         }
     }
+
+    async adminDeleteComment(req, res, next) {
+        try {
+            const idComment = req.params.id
+
+            const comment = await Comment.findOne({
+                _id: idComment
+            })
+
+            if (!comment) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Can't find this comment!"
+                })
+            }
+
+            // all good
+            await Comment.deleteOne({
+                _id: idComment
+            })
+
+            return res.status(200).josn({
+                success: true,
+                message: "This comment is deleted successfully!"
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                success: false, 
+                message: "Internal server error!"
+            })
+        }
+    }   
 }
 
 module.exports = new CommentController()
