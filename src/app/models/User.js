@@ -35,6 +35,10 @@ const User = new Schema({
         type: String,
         default: "https://res.cloudinary.com/dzhc1pttr/image/upload/v1669692149/EBook4U/tczckzptz0hrp2egwury.png"
     },
+    createdAt: {
+        type: Date,
+        default: new Date()
+    },
     role: {
         type: String,
         enum: ["Reader", "Author", "Translator", "Admin"],

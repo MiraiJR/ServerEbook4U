@@ -8,6 +8,8 @@ const chapterController = require("../app/controllers/ChapterController.js")
 const authorController = require("../app/controllers/AuthorController.js")
 const userController = require("../app/controllers/UserController.js")
 const commentController = require("../app/controllers/CommentController.js")
+const countController = require("../app/controllers/CountController.js")
+
 const fileUploader = require("../database/CloudinaryConfig.js")
 
 // middleware
@@ -55,5 +57,10 @@ router.get("/user/all", verifyToken, verifyRole, userController.getAllProfileUse
 
 // interact with comment 
 router.get("/comment/:id", verifyToken, commentController.getCommentOfBook)
+
+// interact with count view page
+router.post("/view", countController.increaseView)
+router.get("/view", countController.filter)
+router.get("/summary", countController.summary)
 
 module.exports = router
