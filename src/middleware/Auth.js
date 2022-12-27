@@ -29,8 +29,17 @@ const verifyToken = (req, res, next) => {
 
 const verifyRoleAdmin = async (req, res, next) => {
     try {
+        const authHeader = req.header("Authorization")
+        const token = authHeader && authHeader.split(" ")[1]
+
+        if (!token) {
+            return res.redirect("http://localhost:3000")
+        }
+
+        const verify = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+
         const user = await User.findOne({
-            _id: req.userID
+            _id: verify.userID
         })
 
         if (!user) {
