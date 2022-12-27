@@ -33,7 +33,10 @@ const verifyRoleAdmin = async (req, res, next) => {
         const token = authHeader && authHeader.split(" ")[1]
 
         if (!token) {
-            return res.redirect("http://localhost:3000")
+            return res.status(400).json({
+                success: false, 
+                message: "Not found token!"
+            })
         }
 
         const verify = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -50,11 +53,22 @@ const verifyRoleAdmin = async (req, res, next) => {
         }
 
         if (user.role != "Admin") {
-            return res.redirect("http://localhost:3000")
+            return res.status(400).json({
+                success: false,
+                message: "User can't access this url!"
+            })
         }
+
+        return res.status(200).json({
+            success: true,
+            message: "This is admin!"
+        })
     } catch (error) {
         console.log(error)
-        return res.redirect("http://localhost:3000")
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error!"
+        })
     }
 }
 
