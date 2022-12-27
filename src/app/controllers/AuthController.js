@@ -91,7 +91,7 @@ class AuthController {
             }
 
             // check username existed
-            const isExisted = await User.findOne({
+            let isExisted = await User.findOne({
                 username
             })
 
@@ -99,6 +99,17 @@ class AuthController {
                 return res.status(400).json({
                     success: false,
                     message: "Username is used! Please using another one!"
+                })
+            }
+
+            isExisted = await User.findOne({
+                email
+            })
+
+            if(isExisted) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Email is used! Please using anothor one!"
                 })
             }
 

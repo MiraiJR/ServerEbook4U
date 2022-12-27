@@ -24,35 +24,44 @@ class UserController {
                 })
             }
 
-            user = user.toObject();
-            
-            if(req.file) {
-                user.avatar = req.file.path
+            if (email != user.email) {
+                const isCheckedEmail = await User.findOne({
+                    email
+                })
+
+                if (isCheckedEmail) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Email is used! Please using anothor one!"
+                    })
+                }
             }
 
-            user.fullname = fullname;
-            user.phone = phone;
-            user.email = email;
-            user.dateOfBirth = dateOfBirth;
-            user.address = address;
+            let urlAvatar = user.avatar
 
-            delete user.role
-            delete user._id
-            delete user.username
-            delete user.password
-            delete user.avatar
-            delete user.__v
+            if (req.file) {
+                urlAvatar = req.file.path
+            }
 
-            await User.updateOne({
+            const updatedUser = await User.findOneAndUpdate({
                 _id: idUser
             }, {
-                $set: user
+                $set: {
+                    fullname,
+                    phone,
+                    email,
+                    dateOfBirth,
+                    address,
+                    avatar: urlAvatar
+                }
+            }, {
+                new: true
             })
 
             return res.status(200).json({
                 success: true,
                 message: "Update profile successfully!",
-                data: user
+                data: updatedUser
             })
         } catch (error) {
             console.log(error)
