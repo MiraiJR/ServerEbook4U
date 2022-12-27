@@ -33,7 +33,7 @@ const verifyRoleAdmin = async (req, res, next) => {
         const token = authHeader && authHeader.split(" ")[1]
 
         if (!token) {
-            return res.status(401).json({
+            return res.status(200).json({
                 success: false, 
                 message: "Not found token!"
             })
@@ -46,14 +46,14 @@ const verifyRoleAdmin = async (req, res, next) => {
         })
 
         if (!user) {
-            return res.status(401).json({
+            return res.status(200).json({
                 success: false,
                 message: "Can't not get this user!"
             })
         }
 
         if (user.role != "Admin") {
-            return res.status(401).json({
+            return res.status(200).json({
                 success: false,
                 message: "User can't access this url!"
             })
