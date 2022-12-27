@@ -2,12 +2,14 @@ const User = require("../models/User.js")
 
 class UserController {
     async editProfile(req, res, next) {
-        const idUser = req.userID;
+        const idUser = req.userID
+        
         const {
             fullname,
             phone,
             email,
-            address
+            address,
+            dateOfBirth
         } = req.body
 
         try {
@@ -27,7 +29,7 @@ class UserController {
             user.fullname = fullname;
             user.phone = phone;
             user.email = email;
-            // user.dateOfBirth = dateOfBirth;
+            user.dateOfBirth = dateOfBirth;
             user.address = address;
 
             delete user.role
