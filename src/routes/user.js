@@ -11,9 +11,11 @@ const {
     verifyToken
 } = require("../middleware/Auth.js")
 
+const upload = require("../database/CloudinaryConfig.js")
+
 // interact with profile
 router.get("/me", verifyToken, userController.getProfile)
-router.put("/me", verifyToken, userController.editProfile)
+router.put("/me", verifyToken, upload.single("file"), userController.editProfile)
 
 // interact with favoritebook
 router.get("/me/favorite-book", verifyToken, favoriteController.getFavoriteList)

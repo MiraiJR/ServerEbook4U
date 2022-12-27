@@ -3,7 +3,7 @@ const User = require("../models/User.js")
 class UserController {
     async editProfile(req, res, next) {
         const idUser = req.userID
-        
+
         const {
             fullname,
             phone,
@@ -25,6 +25,10 @@ class UserController {
             }
 
             user = user.toObject();
+            
+            if(req.file) {
+                user.avatar = req.file.path
+            }
 
             user.fullname = fullname;
             user.phone = phone;
