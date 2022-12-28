@@ -39,7 +39,7 @@ router.post("/book", verifyToken, verifyRole, fileUploader.single("file"), bookC
 router.get("/book/all", bookController.getAllBook)
 router.get("/book/:id", bookController.getBookFollowID)
 router.delete("/book/:id", verifyToken, verifyRole, bookController.deleteBook)
-router.put("/book/:id", verifyToken, verifyRole, bookController.editBook)
+router.put("/book/:id", verifyToken, verifyRole, fileUploader.single("file"), bookController.editBook)
 router.get("/book/top/viewed", bookController.getTopThreeBookFollowView)
 router.get("/book/top/favorite", bookController.getTopThreeBookFollowFavorite)
 router.get("/book/page/pagination", bookController.getPageBook)
