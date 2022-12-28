@@ -266,6 +266,12 @@ class BookController {
 
             let updateBook
 
+            const slug = slugify(name, {
+                replacement: "-",
+                lower: true,
+                trim: true
+            })
+
             if (!req.file) {
                 updateBook = await Book.findOneAndUpdate({
                     _id: idBook
@@ -276,11 +282,7 @@ class BookController {
                         author,
                         category,
                         country,
-                        slug: slugify(name, {
-                            replacement: "-",
-                            lower: true,
-                            trim: true
-                        }),
+                        slug,
                         updatedAt: Date.now()
                     }
                 })
@@ -294,11 +296,7 @@ class BookController {
                         author,
                         category,
                         country,
-                        slug: slugify(name, {
-                            replacement: "-",
-                            lower: true,
-                            trim: true
-                        }),
+                        slug,
                         image: req.file.path,
                         updatedAt: Date.now()
                     }
