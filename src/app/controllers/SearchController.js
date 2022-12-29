@@ -86,7 +86,7 @@ class SearchController {
 
             return res.status(200).json({
                 success: true,
-                message: "Internal server error!",
+                message: "Search Book successfully!",
                 data: books
             })
         } catch (error) {
