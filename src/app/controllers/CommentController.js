@@ -25,9 +25,9 @@ class CommentController {
 
     async addNewComment(req, res, next) {
         const user = req.userID
+        const idBook = req.params.id
 
         const {
-            idBook,
             contentComment
         } = req.body
 
@@ -163,11 +163,11 @@ class CommentController {
         } catch (error) {
             console.log(error)
             return res.status(500).json({
-                success: false, 
+                success: false,
                 message: "Internal server error!"
             })
         }
-    }   
+    }
 }
 
 module.exports = new CommentController()

@@ -37,7 +37,7 @@ router.post("/me/history", verifyToken, historyController.addBookToHistory)
 router.delete("/me/history", verifyToken, historyController.removeBookFromHistory)
 
 // interact with comment
-router.post("/comment", verifyToken, commentController.addNewComment)
+router.post("/comment/:id", verifyToken, commentController.addNewComment)
 router.post("/comment/answer", verifyToken, commentController.addAnswerForComment)
 router.delete("/comment/:id", verifyToken, commentController.deleteComment)
 
