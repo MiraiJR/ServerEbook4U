@@ -75,6 +75,40 @@ class CountryController {
                 }
             }
 
+            if (type == "month") {
+                let resultMonth = []
+                let count = 1
+                let totalViewOfWeek = 0
+                let startDay = ""
+                let endDay = ""
+                for (let i = 0; i < result.length; i++) {
+                    if (count == 7 || i == result.length - 1) {
+                        endDay = result[i].date
+
+                        resultMonth.push({
+                            startDay,
+                            endDay,
+                            totalViewOfWeek
+                        })
+
+                        count = 1
+                        totalViewOfWeek = 0
+                    } else {
+                        if (count == 1) {
+                            startDay = result[i].date
+                        }
+                        count++
+                        totalViewOfWeek += result[i].view
+                    }
+                }
+
+                return res.status(200).json({
+                    success: true,
+                    message: `Get data amount view everyday of ${type} successfully!`,
+                    data: resultMonth
+                })
+            }
+
             return res.status(200).json({
                 success: true,
                 message: `Get data amount view everyday of ${type} successfully!`,
