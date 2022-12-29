@@ -87,8 +87,6 @@ class UserController {
 
             user = user.toObject()
 
-            delete user._id
-            delete user.username
             delete user.password
             delete user.__v
 
