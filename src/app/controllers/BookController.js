@@ -336,7 +336,7 @@ class BookController {
 
             const books = await Book.find().sort({
                 "view": -1
-            }).limit(parseInt(per))
+            }).limit(parseInt(per)).populate("category").populate("country")
 
             if (!books) {
                 return res.status(400).json({
@@ -367,7 +367,7 @@ class BookController {
 
             const books = await Book.find().sort({
                 "numberOfFavorites": -1
-            }).limit(parseInt(per))
+            }).limit(parseInt(per)).populate("category").populate("country")
 
             if (!books) {
                 return res.status(400).json({
