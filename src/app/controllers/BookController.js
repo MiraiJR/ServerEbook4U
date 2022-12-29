@@ -330,9 +330,13 @@ class BookController {
 
     async getTopThreeBookFollowView(req, res, next) {
         try {
+            const {
+                per
+            } = req.query
+
             const books = await Book.find().sort({
-                "view": 1
-            }).limit(3)
+                "view": -1
+            }).limit(parseInt(per))
 
             if (!books) {
                 return res.status(400).json({
@@ -357,9 +361,13 @@ class BookController {
 
     async getTopThreeBookFollowFavorite(req, res, next) {
         try {
+            const {
+                per
+            } = req.query
+
             const books = await Book.find().sort({
-                "numberOfFavorites": 1
-            }).limit(3)
+                "numberOfFavorites": -1
+            }).limit(parseInt(per))
 
             if (!books) {
                 return res.status(400).json({
