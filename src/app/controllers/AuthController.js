@@ -201,7 +201,6 @@ class AuthController {
                 if (err) {
                     console.log(err)
                 } else {
-
                     await User.updateOne({
                         _id: curUser._id
                     }, {
