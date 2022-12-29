@@ -15,6 +15,7 @@ Dự chủ yếu phục vụ cho website đọc sách bao gồm các tính năng
 - Dùng Multer + Cloudinary để lưu trữ hình ảnh
 - Dùng Nodemailer + service gg để làm send mail reset mật khẩu
 - Dùng socket.io để làm realtime chat + notification
+- Dùng JWT để tạo accessToken, refreshToken để xác nhận phân quyền tương tác API
 # API
 Document API BackEnd Ebook4U  
 Host: https://ebook4u-server.onrender.com  
@@ -34,3 +35,35 @@ Cấu truc API trả về:
 ## Lỗi server:
 - Status: 500
 - Success: false
+# Các URL tương tác API
+## Tạo sách
+- quyền: Admin
+- URL: https://ebook4u-server.onrender.com/api/book
+- Method: POST
+- Gửi: name,
+            description,
+            author,
+            category (array),
+            country
+## Lấy tất cả sách 
+- quyền: everyone
+- URL: https://ebook4u-server.onrender.com/api/book/all
+- method: GET
+## Lấy thông tin 1 cuôn sách cụ thể
+- quyền: everyone
+- URL: https://ebook4u-server.onrender.com/api/book/id (id ở đây là id của cuốn sách cần lấy)
+- Method: GET
+## Sửa thông tin 1 cuốn sách cụ thẻ
+- quyền: admin
+- URL: https://ebook4u-server.onrender.com/api/book/id (id ở đây là id của cuốn sách cần sửa)
+- Method: PUT
+- Gửi:  name,
+                description,
+                author,
+                category (array),
+                country
+## Xóa một cuốn sách cụ thể
+- quyền: admin
+- URL: https://ebook4u-server.onrender.com/api/book/id (id ở đây là id của cuốn sách cần xóa)
+- Method: DELETE
+
