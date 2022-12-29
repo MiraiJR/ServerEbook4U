@@ -106,7 +106,7 @@ class AuthController {
                 email
             })
 
-            if(isExisted) {
+            if (isExisted) {
                 return res.status(400).json({
                     success: false,
                     message: "Email is used! Please using anothor one!"
@@ -157,17 +157,25 @@ class AuthController {
     async forgetPassword(req, res, next) {
         try {
             const {
-                username
+                information
             } = req.body
 
-            const curUser = await User.findOne({
-                username
+            let curUser
+
+            curUser = await User.findOne({
+                username: information
             })
+
+            if (!curUser) {
+                curUser = await User.findOne({
+                    email: information
+                })
+            }
 
             if (!curUser) {
                 return res.status(400).json({
                     success: false,
-                    message: "Username don't exist!"
+                    message: "Acount don't exist!"
                 })
             }
 
