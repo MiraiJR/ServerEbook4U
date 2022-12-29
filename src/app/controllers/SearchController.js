@@ -26,6 +26,19 @@ class SearchController {
                     "foreignField": "_id",
                     "as": "category"
                 }
+            }, {
+                "$lookup": {
+                    "from": "chapters",
+                    "localField": "_id",
+                    "foreignField": "book",
+                    "as": "numberChapter"
+                }
+            }, {
+                "$set": {
+                    "numberChapter": {
+                        "$size": "$numberChapter"
+                    }
+                }
             }]
 
             if (q) {
