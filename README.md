@@ -10,6 +10,11 @@ Dự chủ yếu phục vụ cho website đọc sách bao gồm các tính năng
 **npm i**
 - Chạy project  
 **npm start**
+# Một vài kỹ thuật sử dụng
+- Dùng Crypto-JS để mã hóa với mỗi mật khâu dù giống nhau nhưng cho 2 encrypt khác nhau
+- Dùng Multer + Cloudinary để lưu trữ hình ảnh
+- Dùng Nodemailer + service gg để làm send mail reset mật khẩu
+- Dùng socket.io để làm realtime chat + notification
 # API
 Document API BackEnd Ebook4U  
 Host: https://ebook4u-server.onrender.com  
